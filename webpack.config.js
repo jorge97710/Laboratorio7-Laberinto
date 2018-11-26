@@ -42,7 +42,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Super Memory!',
+      title: 'a-MAZE-ng',
       minify: {
         collapseWhitespace: true
       },
