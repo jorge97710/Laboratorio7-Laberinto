@@ -1,0 +1,45 @@
+{
+  "name": "lab6",
+  "version": "1.0.0",
+  "description": "Primer proyecto",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server ",
+    "prod": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorge97710/LAB6-Super-Memory-.git"
+  },
+  "author": "Jorge Azmitia <azm15202@uvg.edu.gt>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jorge97710/LAB6-Super-Memory-/issues"
+  },
+  "homepage": "https://github.com/jorge97710/LAB6-Super-Memory-#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.1",
+    "file-loader": "^2.0.0",
+    "html-webpack-plugin": "^4.0.0-beta.4",
+    "image-webpack-loader": "^4.5.0",
+    "node-sass": "^4.10.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "node-fetch": "^2.3.0",
+    "react-keydown": "^1.9.7",
+    "request": "^2.88.0",
+    "sweetalert": "^2.1.2"
+  }
+}
