@@ -25,7 +25,7 @@ html, body {
     background-color: blue;
   }
 
-  &--snake {
+  &--player {
     background-color: orange;
   }
   &--wall{
@@ -36,7 +36,7 @@ html, body {
   }
 }
 
-.snake-app {
+.player-app {
   position: relative;
   margin: 10px auto;
   &:focus {
@@ -44,7 +44,7 @@ html, body {
   }
 }
 
-.snake-app__overlay {
+.player-app__overlay {
   position: absolute;
   left: 0;
   right: 0;
