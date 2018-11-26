@@ -57,11 +57,6 @@ function shallowEquals(arr1, arr2) {
     return equals;
 }
 
-function arrayDiff(arr1, arr2) {
-    return arr1.map((a, i) => {
-        return a - arr2[i]
-    })
-}
 
 // display a single cell
 function GridCell(props) {
@@ -94,11 +89,8 @@ class App extends React.Component {
 
         this.checkIfWon = this.checkIfWon.bind(this);
         this.startGame = this.startGame.bind(this);
-        this.endGame = this.endGame.bind(this);
         this.moveplayer = this.moveplayer.bind(this);
-        this.doesntOverlap = this.doesntOverlap.bind(this);
         this.setDirection = this.setDirection.bind(this);
-        this.removeTimers = this.removeTimers.bind(this);
     }
     ;
     setDirection({ keyCode }) {
@@ -111,7 +103,7 @@ class App extends React.Component {
 
     moveplayer() {
         const newplayer = [];
-       
+
         switch (this.state.direction) {
             case 40:
                 if (turno == 0) {
@@ -131,10 +123,8 @@ class App extends React.Component {
                         newplayer[0] = [this.state.player[0][0] + 1, this.state.player[0][1]];
                         this.setState({ player: newplayer });
                         this.checkIfWon(newplayer);
-                        movimientos=movimientos+1;
-                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
-                            this.endGame()
-                        }
+                        movimientos = movimientos + 1;
+
                         turno = 0;
                     }
 
@@ -160,10 +150,8 @@ class App extends React.Component {
                         newplayer[0] = [this.state.player[0][0] - 1, this.state.player[0][1]];
                         this.setState({ player: newplayer });
                         this.checkIfWon(newplayer);
-                        movimientos=movimientos+1;
-                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
-                            this.endGame()
-                        } turno = 0;
+                        movimientos = movimientos + 1;
+                        turno = 0;
                     }
 
                 }
@@ -187,10 +175,8 @@ class App extends React.Component {
                         newplayer[0] = [this.state.player[0][0], this.state.player[0][1] + 1];
                         this.setState({ player: newplayer });
                         this.checkIfWon(newplayer);
-                        movimientos=movimientos+1;
-                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
-                            this.endGame()
-                        } turno = 0;
+                        movimientos = movimientos + 1;
+                        turno = 0;
                     }
 
                 }
@@ -213,11 +199,8 @@ class App extends React.Component {
                         newplayer[0] = [this.state.player[0][0], this.state.player[0][1] - 1];
                         this.setState({ player: newplayer });
                         this.checkIfWon(newplayer);
-                        movimientos=movimientos+1;
-                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
-                            // end the game
-                            this.endGame()
-                        } turno = 0;
+                        movimientos = movimientos + 1;
+                        turno = 0;
                     }
                 }
                 break;
@@ -238,26 +221,11 @@ class App extends React.Component {
 
     }
 
-    isValid(cell) {
-        return (
-            cell[0] > -1 &&
-            cell[1] > -1 &&
-            cell[0] < this.numCells &&
-            cell[1] < this.numCells
-        );
-    }
 
-    doesntOverlap(player) {
-        return (
-            player.slice(1).filter(c => {
-                return shallowEquals(player[0], c);
-            }).length === 0
-        );
-    }
 
     startGame() {
         this.removeTimers();
-        
+
         this.setState({
             status: 1,
             player: [[22, 22]],
@@ -289,7 +257,7 @@ class App extends React.Component {
         this.numCells = Math.floor(this.props.size / 20);
         const cellSize = this.props.size / this.numCells;
         const cellIndexes = Array.from(Array(this.numCells).keys());
-      
+
 
 
         var cells = [];
@@ -336,7 +304,7 @@ class App extends React.Component {
 
 
 
-        
+
         let overlay;
         if (this.state.status === 0) {
             overlay = (
@@ -352,7 +320,7 @@ class App extends React.Component {
                     <button onClick={this.startGame}>Start a new game</button>
                 </div>
             );
-            ganaste=0;
+            ganaste = 0;
         }
         return (
             <div
