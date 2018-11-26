@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 
 //console.log(cartas);
 var turno = 0;
+var ganaste = 0;
+var movimientos = 0;
 var fallos = 0;
 const fetch = require("node-fetch");
 var FormData = require('form-data');
@@ -65,7 +67,7 @@ function arrayDiff(arr1, arr2) {
 function GridCell(props) {
     const classes = `grid-cell 
 ${props.foodCell ? "grid-cell--food" : ""} 
-${props.snakeCell ? "grid-cell--snake" : ""}
+${props.playerCell ? "grid-cell--player" : ""}
 ${props.wallcell ? "grid-cell--wall" : ""}
 ${props.blancCell ? "grid-cell--blanc" : ""}
 `;
@@ -82,7 +84,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            snake: [],
+            player: [],
             food: [],
             // 0 = not started, 1 = in progress, 2= finished
             status: 0,
@@ -90,52 +92,47 @@ class App extends React.Component {
             direction: 39
         };
 
-        //    this.moveFood = this.moveFood.bind(this);
-        this.checkIfAteFood = this.checkIfAteFood.bind(this);
+        this.checkIfWon = this.checkIfWon.bind(this);
         this.startGame = this.startGame.bind(this);
         this.endGame = this.endGame.bind(this);
-        this.moveSnake = this.moveSnake.bind(this);
+        this.moveplayer = this.moveplayer.bind(this);
         this.doesntOverlap = this.doesntOverlap.bind(this);
         this.setDirection = this.setDirection.bind(this);
         this.removeTimers = this.removeTimers.bind(this);
     }
-    // randomly place snake food
-;
+    ;
     setDirection({ keyCode }) {
-        // if it's the same direction or simply reversing, ignore
         let changeDirection = true
 
         if (changeDirection) this.setState({ direction: keyCode });
         console.log(keyCode);
-        this.moveSnake();
+        this.moveplayer();
     }
 
-    moveSnake() {
-        const newSnake = [];
-        // if (turno==1){turno=0;}
-        // set in the new "head" of the snake
+    moveplayer() {
+        const newplayer = [];
+       
         switch (this.state.direction) {
-            // down
             case 40:
                 if (turno == 0) {
                     turno = 1;
                 } else if (turno == 1) {
-                     console.log("this.state.snake[0] tiene:" + this.state.snake[0][0]);
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][1]);
+                    console.log("this.state.player[0] tiene:" + this.state.player[0][0]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][1]);
 
-                    var fil =this.state.snake[0][0]+1;
-                    var col=this.state.snake[0][1];
-                    var b= filas[fil];
+                    var fil = this.state.player[0][0] + 1;
+                    var col = this.state.player[0][1];
+                    var b = filas[fil];
                     if (b[col] == "+" || b[col] == "-" || b[col] == "|") {
 
                         console.log("CHOCARIAS");
-                    }else{
+                    } else {
 
-                        newSnake[0] = [this.state.snake[0][0]+1, this.state.snake[0][1] ];
-                        this.setState({ snake: newSnake });
-                        this.checkIfAteFood(newSnake);
-                        if (!this.isValid(newSnake[0]) || !this.doesntOverlap(newSnake)) {
-                            // end the game
+                        newplayer[0] = [this.state.player[0][0] + 1, this.state.player[0][1]];
+                        this.setState({ player: newplayer });
+                        this.checkIfWon(newplayer);
+                        movimientos=movimientos+1;
+                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
                             this.endGame()
                         }
                         turno = 0;
@@ -144,82 +141,80 @@ class App extends React.Component {
 
                 }
                 break;
-            // up
             case 38:
                 if (turno == 0) {
                     turno = 1;
                 } else if (turno == 1) {
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][0]);
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][1]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][0]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][1]);
 
-                    var fil =this.state.snake[0][0]-1;
-                    var col=this.state.snake[0][1];
-                    var b= filas[fil];
+                    var fil = this.state.player[0][0] - 1;
+                    var col = this.state.player[0][1];
+                    var b = filas[fil];
                     if (b[col] == "+" || b[col] == "-" || b[col] == "|") {
 
                         console.log("CHOCARIAS");
-                    }else{
+                    } else {
 
 
-                        newSnake[0] = [this.state.snake[0][0]-1, this.state.snake[0][1] ];
-                        this.setState({ snake: newSnake });
-                        this.checkIfAteFood(newSnake);
-                        if (!this.isValid(newSnake[0]) || !this.doesntOverlap(newSnake)) {
-                            // end the game
+                        newplayer[0] = [this.state.player[0][0] - 1, this.state.player[0][1]];
+                        this.setState({ player: newplayer });
+                        this.checkIfWon(newplayer);
+                        movimientos=movimientos+1;
+                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
                             this.endGame()
                         } turno = 0;
                     }
 
                 }
                 break;
-            // right
             case 39:
                 if (turno == 0) {
                     turno = 1;
                 } else if (turno == 1) {
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][0]);
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][1]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][0]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][1]);
 
-                    var fil =this.state.snake[0][0];
-                    var col=this.state.snake[0][1]+1;
-                    var b= filas[fil];
+                    var fil = this.state.player[0][0];
+                    var col = this.state.player[0][1] + 1;
+                    var b = filas[fil];
                     if (b[col] == "+" || b[col] == "-" || b[col] == "|") {
 
                         console.log("CHOCARIAS");
-                    }else{
+                    } else {
 
 
-                        newSnake[0] = [this.state.snake[0][0] , this.state.snake[0][1]+1];
-                        this.setState({ snake: newSnake });
-                        this.checkIfAteFood(newSnake);
-                        if (!this.isValid(newSnake[0]) || !this.doesntOverlap(newSnake)) {
-                            // end the game
+                        newplayer[0] = [this.state.player[0][0], this.state.player[0][1] + 1];
+                        this.setState({ player: newplayer });
+                        this.checkIfWon(newplayer);
+                        movimientos=movimientos+1;
+                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
                             this.endGame()
                         } turno = 0;
                     }
 
                 }
                 break;
-            // left
             case 37:
                 if (turno == 0) {
                     turno = 1;
                 } else if (turno == 1) {
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][0]);
-                    console.log("this.state.snake[0][0] tiene:" + this.state.snake[0][1]);
-                    var fil =this.state.snake[0][0];
-                    var col=this.state.snake[0][1]-1;
-                    var b= filas[fil];
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][0]);
+                    console.log("this.state.player[0][0] tiene:" + this.state.player[0][1]);
+                    var fil = this.state.player[0][0];
+                    var col = this.state.player[0][1] - 1;
+                    var b = filas[fil];
                     if (b[col] == "+" || b[col] == "-" || b[col] == "|") {
 
                         console.log("CHOCARIAS");
-                    }else{
+                    } else {
 
 
-                        newSnake[0] = [this.state.snake[0][0] , this.state.snake[0][1]-1];
-                        this.setState({ snake: newSnake });
-                        this.checkIfAteFood(newSnake);
-                        if (!this.isValid(newSnake[0]) || !this.doesntOverlap(newSnake)) {
+                        newplayer[0] = [this.state.player[0][0], this.state.player[0][1] - 1];
+                        this.setState({ player: newplayer });
+                        this.checkIfWon(newplayer);
+                        movimientos=movimientos+1;
+                        if (!this.isValid(newplayer[0]) || !this.doesntOverlap(newplayer)) {
                             // end the game
                             this.endGame()
                         } turno = 0;
@@ -232,21 +227,18 @@ class App extends React.Component {
 
     }
 
-    checkIfAteFood(newSnake) {
-        //console.log("TAM: " + newSnake.length);
+    checkIfWon(newplayer) {
 
 
-        if (!shallowEquals(newSnake[0], this.state.food)) return
-        // snake gets longer
-        let newSnakeSegment;
-        const lastSegment = newSnake[newSnake.length];
+        if (!shallowEquals(newplayer[0], this.state.food)) return
+        let newplayerSegment;
+        const lastSegment = newplayer[newplayer.length];
         console.log("GANASTE!");
+        ganaste = 1;
 
     }
 
-    // is the cell's position inside the grid?
     isValid(cell) {
-        //console.log("CHEQUEO VALIDES");
         return (
             cell[0] > -1 &&
             cell[1] > -1 &&
@@ -255,26 +247,22 @@ class App extends React.Component {
         );
     }
 
-    doesntOverlap(snake) {
-        //console.log("CHEQUEO")
+    doesntOverlap(player) {
         return (
-            snake.slice(1).filter(c => {
-                return shallowEquals(snake[0], c);
+            player.slice(1).filter(c => {
+                return shallowEquals(player[0], c);
             }).length === 0
         );
     }
 
     startGame() {
         this.removeTimers();
-        // this.moveSnakeInterval = setInterval(this.moveSnake, 130);
-        //   this.moveFood();
-
+        
         this.setState({
             status: 1,
-            snake: [[22, 22]],
+            player: [[22, 22]],
             food: [2, 2]
         });
-        //need to focus so keydown listener will work!
         this.el.focus();
     }
 
@@ -286,7 +274,7 @@ class App extends React.Component {
     }
 
     removeTimers() {
-        if (this.moveSnakeInterval) clearInterval(this.moveSnakeInterval);
+        if (this.moveplayerInterval) clearInterval(this.moveplayerInterval);
         if (this.moveFoodTimeout) clearTimeout(this.moveFoodTimeout)
     }
 
@@ -295,134 +283,80 @@ class App extends React.Component {
     }
 
     render() {
-        // each cell should be approximately 15px wide, so calculate how many we need
+
+
+
         this.numCells = Math.floor(this.props.size / 20);
         const cellSize = this.props.size / this.numCells;
         const cellIndexes = Array.from(Array(this.numCells).keys());
-        //    console.log("CELL INDEXES TIENE:"+ cellIndexes);
-        /*
-            const cells = cellIndexes.map(y => {
-              return cellIndexes.map(x => {
-                const foodCell = this.state.food[0] === x && this.state.food[1] === y;
-                let snakeCell = this.state.snake.filter(c => c[0] === x && c[1] === y);
-          //      console.log("SNAKE CELL TIENE:" + snakeCell);
-                snakeCell = snakeCell.length && snakeCell[0];
-                let wallcell = (0 === x && 0 === y) && (1===x && 0===y);
-                return (
-                  <GridCell
-                    foodCell={foodCell}
-                    snakeCell={snakeCell}
-                    wallcell={wallcell}
-                    size={cellSize}
-                    key={x + " " + y}
-                  />
-                );
-              });
-            });/*/
+      
 
 
         var cells = [];
         for (var i = 0; i < filas.length; i++) {
-            //console.log(filas[i] + "\n");
             var a = filas[i];
             for (var x = 0; x < a.length; x++) {
-                //console.log(a[x] + " ");
-                let snakeCell = this.state.snake;
-                //console.log("SNAKECELLLLLLLLLLLLLLLLL TIENE: " + snakeCell[0][0] + "  :  " + snakeCell[0][1]);
-                if (snakeCell[0][0] == i && snakeCell[0][1] == x) {
-                  //  console.log("CULEBRAssssssssssssssssss");
+                let playerCell = this.state.player;
+                if (playerCell[0][0] == i && playerCell[0][1] == x) {
                     cells.push(<GridCell
-                        snakeCell
+                        playerCell
                         size={cellSize}
-                        key={i + " " + x}
+                        key={x + " " + i}
                     />);
 
                 } else if (i == 2 && x == 2) {
-//                    console.log("COMIDAsssssssssssssssss");
                     const foodCell = [2, 2];
                     cells.push(<GridCell
                         foodCell
 
                         size={cellSize}
-                        key={i + " " + x}
+                        key={x + " " + i}
                     />);
 
                 } else {
-                    //console.log("ENTRE AL ELSE DE NO COMIDA O CULEBRA I: " + i + " X: " + x);
                     if (a[x] == " ") {
-                        //console.log("VACIOSSSSSSSSSSSSSSSSSS")
                         cells.push(<GridCell
                             blancCell
                             size={cellSize}
 
-                            key={i + " " + x}
+                            key={x + " " + i}
                         />);
                     } else if (a[x] == "+" || a[x] == "-" || a[x] == "|") {
-                        //console.log("PARES!!!!!!!!!!!!!!!!!")
                         var wallcell = [x, i];
                         cells.push(<GridCell
 
                             wallcell
                             size={cellSize}
-                            key={i + " " + x}
+                            key={x + " " + i}
                         />);
                     }
                 }
-
-
-
             }
-            //console.log("\n")
         }
 
 
 
-        /*
-        PRUEBA DIFERENTE
-        for (var i = 0; i < filas.length; i++) {
-              //console.log(filas[i] + "\n");
-              var a = filas[i];
-              for (var x = 0; x < a.length; x++) {
-                console.log(a[x] + " ");
-              }
-              //console.log("\n")
-            }
         
-        
-        
-        
-        */
-        /*
-    codigo de la gridcell
-     <GridCell
-                foodCell={foodCell}
-                snakeCell={snakeCell}
-                wallcell={wallcell}
-                size={cellSize}
-                key={x + " " + y}
-              />
-    
-        */
-        //console.log("CELLS TIENE: "+cells);
         let overlay;
         if (this.state.status === 0) {
             overlay = (
-                <div className="snake-app__overlay">
+                <div className="player-app__overlay">
                     <button onClick={this.startGame}>Start game!</button>
                 </div>
             );
-        } else if (this.state.status === 2) {
+        } else if (ganaste == 1) {
             overlay = (
-                <div className="snake-app__overlay">
-                    <div className="mb-1"><b>GAME OVER!</b></div>
-                    <div className="mb-1">Your score: {this.state.snake.length} </div>
+                <div className="player-app__overlay">
+                    <div className="mb-1"><b>GANASTE!!</b></div>
+                    <div className="mb-1">Movimientos: {movimientos} </div>
                     <button onClick={this.startGame}>Start a new game</button>
                 </div>
             );
+            ganaste=0;
         }
         return (
             <div
-                className="snake-app"
+                className="player-app"
                 onKeyDown={this.setDirection}
                 style={{
                     width: this.props.size + "px",
@@ -444,6 +378,11 @@ class App extends React.Component {
             </div>
         );
     }
+
+
+
+
+
 }
 
 ReactDOM.render(<App size={500} />, document.getElementById("root"));
